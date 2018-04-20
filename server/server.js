@@ -12,12 +12,17 @@ const server = http.createServer(app);
 const io = socketIO(server);
 io.on('connection', (socket) => {
     console.log('new user connected');
-
+    socket.emit('newMessage', {from: 'admin', text: 'welcome', createdAt: Date.now()});
+    socket.broadcast.emit('newMessage', {from: 'admin', text: 'new user joined', createdAt: Date.now()});
     socket.on('createMessage', ({from, text}) => {
         console.log(from, text);
-        io.emit('newMessage', {
-            from, text, createAt: Date.now()
-        });
+        // io.emit('newMessage', {
+        //     from, text, createAt: Date.now()
+        // });
+
+        // socket.broadcast.emit('newMessage', {
+        //     from, text, createAt: Date.now()
+        // });
     });
 
     socket.on('disconnect', () => {
