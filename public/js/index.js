@@ -1,7 +1,6 @@
 const socket = io();
 socket.on('connect', function () {
     console.log('Connected to server');
-    socket.emit('createMessage', {foo: 'bar'});
 });
 
 socket.on('disconnect', () => {

@@ -13,12 +13,11 @@ const io = socketIO(server);
 io.on('connection', (socket) => {
     console.log('new user connected');
 
-    socket.emit('newMessage', {
-        createAt: Date.now()
-    });
-
-    socket.on('createMessage', (data) => {
-        console.log(data);
+    socket.on('createMessage', ({from, text}) => {
+        console.log(from, text);
+        io.emit('newMessage', {
+            from, text, createAt: Date.now()
+        });
     });
 
     socket.on('disconnect', () => {
