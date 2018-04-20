@@ -14,10 +14,11 @@ io.on('connection', (socket) => {
     console.log('new user connected');
     socket.emit('newMessage', generateMessage('admin', 'welcome'));
     socket.broadcast.emit('newMessage', generateMessage('admin', 'new user joined'));
-    socket.on('createMessage', ({from, text}) => {
+    socket.on('createMessage', ({from, text}, callback) => {
         console.log(from, text);
         io.emit('newMessage', generateMessage(from, text));
-
+        // the callback function here is the acknowledgement
+        callback('here is the acknowledgement from the server');
         // socket.broadcast.emit('newMessage', {
         //     from, text, createAt: Date.now()
         // });

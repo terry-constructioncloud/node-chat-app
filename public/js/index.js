@@ -8,7 +8,18 @@ socket.on('disconnect', () => {
 });
 
 
-socket.on('newMessage', (data) => {
-    console.log('new message', data);
+socket.on('newMessage', (message) => {
+    console.log('new message', message);
+    const li = $('<li></li>')
+    li.text(`${message.from}: ${message.text}`);
+    $('#messages').append(li);
 });
 
+
+$('#message-form').on('submit', (e) => {
+    e.preventDefault();
+    socket.emit('createMessage', {from: 'a', text: $('[name=message]').val()}, (data) => {
+            console.log('the server got it.', data);
+        }
+    );
+});
