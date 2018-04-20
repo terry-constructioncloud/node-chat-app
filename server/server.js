@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const socketIO = require('socket.io');
 const http = require('http');
-
+const {generateMessage} = require('./utils/message');
 
 const port = process.env.PORT || 3000;
 const publicPath = path.join(__dirname, '../public');
@@ -12,13 +12,11 @@ const server = http.createServer(app);
 const io = socketIO(server);
 io.on('connection', (socket) => {
     console.log('new user connected');
-    socket.emit('newMessage', {from: 'admin', text: 'welcome', createdAt: Date.now()});
-    socket.broadcast.emit('newMessage', {from: 'admin', text: 'new user joined', createdAt: Date.now()});
+    socket.emit('newMessage', generateMessage('admin', 'welcome'));
+    socket.broadcast.emit('newMessage', generateMessage('admin', 'new user joined'));
     socket.on('createMessage', ({from, text}) => {
         console.log(from, text);
-        // io.emit('newMessage', {
-        //     from, text, createAt: Date.now()
-        // });
+        io.emit('newMessage', generateMessage(from, text));
 
         // socket.broadcast.emit('newMessage', {
         //     from, text, createAt: Date.now()
