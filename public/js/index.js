@@ -9,19 +9,15 @@ socket.on('disconnect', () => {
 
 
 socket.on('newMessage', (message) => {
-    console.log('new message', message);
-    const li = $('<li></li>');
-    li.text(`${message.from} ${message.createdAt}: ${message.text}  `);
-    $('#messages').append(li);
+    const template = $('#message-template').html();
+    const html = Mustache.render(template, {message});
+    $('#messages').append(html);
 });
 
 socket.on('newLocationMessage', message => {
-    const li = $('<li></li>');
-    const a = $('<a target="_blank">location</a>');
-    a.attr('href', message.url);
-    li.text(`${message.from}: `);
-    li.append(a);
-    $('#messages').append(li);
+    const template = $('#location-message-template').html();
+    const html = Mustache.render(template, {message});
+    $('#messages').append(html);
 });
 
 $('#message-form').on('submit', (e) => {
