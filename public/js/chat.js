@@ -13,6 +13,15 @@ const scrollToBottom = () => {
 
 const socket = io();
 socket.on('connect', function () {
+    const params = $.deparam(window.location.search);
+    socket.emit('join', params, error => {
+        if (error) {
+            alert(error);
+            window.location.href = '/';
+        } else {
+            console.log('no error')
+        }
+    });
     console.log('Connected to server');
 });
 
