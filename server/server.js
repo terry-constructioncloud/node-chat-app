@@ -14,13 +14,14 @@ const server = http.createServer(app);
 const io = socketIO(server);
 io.on('connection', (socket) => {
     console.log('new user connected');
-    socket.emit('newMessage', generateMessage('admin', 'welcome'));
-    socket.broadcast.emit('newMessage', generateMessage('admin', 'new user joined'));
-
     socket.on('join', (params, callback) => {
         if (!isRealString(params.name) || !isRealString(params.room)) {
             callback('Name and room name are required.');
         }
+        socket.join(params.room);
+
+        socket.emit('newMessage', generateMessage('admin', 'welcome'));
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('admin', `${params.name} has joined`));
         callback();
     });
 
