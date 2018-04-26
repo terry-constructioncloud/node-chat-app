@@ -29,9 +29,9 @@ io.on('connection', (socket) => {
         callback();
     });
 
-    socket.on('createMessage', ({from, text}, callback) => {
-        console.log(from, text);
-        io.emit('newMessage', generateMessage(from, text));
+    socket.on('createMessage', (text, callback) => {
+        const user = users.getUser(socket.id);
+        io.to(user.room).emit('newMessage', generateMessage(user.name, text));
         // the callback function here is the acknowledgement
         callback('here is the acknowledgement from the server');
         // socket.broadcast.emit('newMessage', {
@@ -40,7 +40,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('createLocationMessage', ({latitude, longitude}) => {
-        io.emit('newLocationMessage', generateLocationMessage('admin', latitude, longitude));
+        const user = users.getUser(socket.id);
+        io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, latitude, longitude));
     });
 
     socket.on('disconnect', () => {

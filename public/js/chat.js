@@ -57,7 +57,7 @@ $('#message-form').on('submit', (e) => {
     e.preventDefault();
     const messageTextBox = $('[name=message]');
     const params = $.deparam(window.location.search);
-    socket.emit('createMessage', {from: params.name, text: messageTextBox.val()}, (data) => {
+    socket.emit('createMessage', messageTextBox.val(), (data) => {
             messageTextBox.val('');
             console.log('the server got it.', data);
         }
